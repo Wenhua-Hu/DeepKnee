@@ -1,2 +1,2 @@
-# UVA_DS_PDP
+# UVA21_DSP_QUIN
 Quin Project
