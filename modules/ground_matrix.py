@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from collections import Counter
 import cv2
-import imutils
 
 import tensorflow as tf
 from tensorflow import keras
@@ -214,10 +213,28 @@ class HeatmapSquares(object):
 
     @staticmethod
     def draw_one_group(image, group, line_thickness, line_color):
+        im_w, im_h, _ = image.shape
+        w_transform_factor = 1
+        h_transform_factor = 1
+        if im_w != 224:
+            w_transform_factor = im_w / 224
+        if im_h != 224:
+            h_transform_factor = im_h / 224
+            
+        
         # Function to draw a rectangle around one group
 
         cloned_image = image.copy() # copy the image so that the original does not get polluted
         top,bot,left,right = group.get_edges()
+
+        if w_transform_factor != 1:
+            left = round(left * w_transform_factor)
+            right = round(right * w_transform_factor)
+            
+        if h_transform_factor != 1:
+            top = round(top * h_transform_factor)
+            bot = round(bot * h_transform_factor)
+
         cv2.line(cloned_image, (right,bot), (left,bot), line_color, line_thickness)
         cv2.line(cloned_image, (right,top), (left,top), line_color, line_thickness)
         cv2.line(cloned_image, (left,top), (left,bot), line_color, line_thickness)

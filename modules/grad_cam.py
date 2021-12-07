@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from collections import Counter
 import cv2
-import imutils
 
 import tensorflow as tf
 from tensorflow import keras
@@ -108,7 +107,7 @@ class GradCAM:
         return heatmap
 
     def overlay_heatmap(self, heatmap, image, alpha=0.5,
-                        colormap=cv2.COLORMAP_VIRIDIS):
+                        colormap= cv2.COLORMAP_COOL):
         # apply the supplied color map to the heatmap and then
         # overlay the heatmap on the input image
         heatmap = cv2.applyColorMap(heatmap, colormap)

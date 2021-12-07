@@ -1,44 +1,44 @@
-try:
-    from enum import Enum
-    from io import BytesIO, StringIO
-    from typing import Union
+#try:
+from enum import Enum
+from io import BytesIO, StringIO
+from typing import Union
 
-    import pandas as pd
-    from PIL import Image
-    import streamlit as st
-    import os
+import pandas as pd
+from PIL import Image
+import streamlit as st
+import os
 
-    from modules.grad_cam import GradCAM
-    from modules.ground_matrix import Groupmatrix, HeatmapSquares
+from modules.grad_cam import GradCAM
+from modules.ground_matrix import Groupmatrix, HeatmapSquares
 
-    import numpy as np
-    import random
-    import matplotlib.pyplot as plt
-    import matplotlib.image as mpimg
-    from collections import Counter
-    import cv2
-    import imutils
-    import matplotlib
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+from collections import Counter
+import cv2
+#import imutils
+import matplotlib
 
-    import tensorflow as tf
-    from tensorflow import keras
-    from tensorflow.keras.layers import Dense, Embedding, Conv1D, GlobalMaxPooling1D, Flatten, Dropout, Input, Lambda, concatenate, BatchNormalization
-    from tensorflow.keras.models import Model
-    from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
-    from tensorflow.keras.optimizers import Adam, SGD, Adamax
-    from tensorflow.keras import regularizers, optimizers
-    from tensorflow.keras.layers.experimental import preprocessing
-    from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array, load_img
-    from tensorflow.keras.applications import imagenet_utils
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.layers import Dense, Embedding, Conv1D, GlobalMaxPooling1D, Flatten, Dropout, Input, Lambda, concatenate, BatchNormalization
+from tensorflow.keras.models import Model
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.optimizers import Adam, SGD, Adamax
+from tensorflow.keras import regularizers, optimizers
+from tensorflow.keras.layers.experimental import preprocessing
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array, load_img
+from tensorflow.keras.applications import imagenet_utils
 
-    from tensorflow.python.keras.applications.vgg16 import VGG16, preprocess_input
-    # from tensorflow.python.keras.applications.resnet import ResNet50, preprocess_input
-    from tensorflow.python.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
-    # from tensorflow.python.keras.applications.efficientnet import EfficientNetB6, preprocess_input
+from tensorflow.python.keras.applications.vgg16 import VGG16, preprocess_input
+# from tensorflow.python.keras.applications.resnet import ResNet50, preprocess_input
+from tensorflow.python.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
+# from tensorflow.python.keras.applications.efficientnet import EfficientNetB6, preprocess_input
 
-    from tensorflow.python.framework.ops import disable_eager_execution, enable_eager_execution
-except Exception as e:
-    print(e)
+from tensorflow.python.framework.ops import disable_eager_execution, enable_eager_execution
+#except Exception as e:
+#    print(e)
 
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -142,7 +142,7 @@ def show_prediction(obj_image, model):
     #path to example image
     IMG_PATH = obj_image.url #r'C:\Users\whu\Desktop\DSP_project\UVA21_DSP_QUIN\materials\Lukas\9999862R.png'
     #path to stored model: /VGG16-acc49 (whole folder with .pb file in it)
-    MODEL_PATH = r'C:\Users\whu\Desktop\DSP_project\UVA21_DSP_QUIN\data\models\VGG16-acc49'
+    MODEL_PATH = r'data\models\VGG16-acc49'
     cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ["green","yellow","red"])
 #LOAD MODEL:
     model = keras.models.load_model(MODEL_PATH)
@@ -172,17 +172,18 @@ def show_prediction(obj_image, model):
     col3, col4 = st.columns(2)
     col3.header("Bounding Box:")
     st.text("")
-    plt.figure(figsize = (15,15))
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    plt.imshow(squares)
-    col3.pyplot(use_column_width=True)
+    col3.image(squares, use_column_width=True)
+    #plt.figure(figsize = (15,15))
+    #st.set_option('deprecation.showPyplotGlobalUse', False)
+    #plt.imshow(squares)
+    #col3.pyplot(use_column_width=True)
 
 
 
 
 
 #=======================================================================
-def draw_squares(model, output, image, orig, min_intensity = 120,
+def draw_squares(model, output, image, orig, min_intensity = 140,
                  min_size = 625, min_perc = 0.03,
                  cmap='inferno',
                  intensity_based_size = False, accuracy = 0,):
