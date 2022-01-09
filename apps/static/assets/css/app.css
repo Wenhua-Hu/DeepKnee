@@ -1,0 +1,283 @@
+.card.card_hover:hover{
+     transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+
+.form-check-custom {
+  cursor: pointer;
+}
+
+.form-check-custom input {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.form-check-custom span {
+  display: inline-block;
+  position: relative;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--gray);
+  border-radius: 50%;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 200ms ease;
+}
+
+.form-check-custom.with-icon span,
+.form-check-custom.with-icon-side span {
+  width: 21px;
+  height: 21px;
+}
+
+.form-check-custom input:disabled + span {
+  opacity: .35;
+}
+
+.form-check-custom input:checked:disabled + span {
+  opacity: .25;
+}
+
+.form-check-custom input:not(:disabled) + span:hover {
+  border-color: var(--dark-gray);
+}
+
+.form-check-custom input:checked + span {
+  border-color: var(--primary);
+}
+
+.form-check-custom.success input:checked + span {
+  border-color: var(--success);
+}
+
+.form-check-custom.danger input:checked + span {
+  border-color: var(--danger);
+}
+
+.form-check-custom span:before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: 1;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.form-check-custom.with-icon span:before,
+.form-check-custom.with-icon-side span:before {
+  top: 1px;
+  left: 1px;
+  width: 17px;
+  height: 17px;
+}
+
+.form-check-custom.success span:before {
+  background-color: var(--success);
+}
+
+.form-check-custom.danger span:before {
+  background-color: var(--danger);
+}
+
+.form-check-custom input:checked + span:before {
+  opacity: 1;
+}
+
+.form-check-custom.with-icon i,
+.form-check-custom.with-icon-side i {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  z-index: 2;
+  color: #fff;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.form-check-custom.with-icon-side i {
+  top: 2px;
+  left: 26px;
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.form-check-custom.danger.with-icon-side i {
+  color: var(--danger);
+}
+
+.form-check-custom.success.with-icon-side i {
+  color: var(--success);
+}
+
+.form-check-custom.with-icon input:checked + span i,
+.form-check-custom.with-icon-side input:checked + span i {
+  opacity: 1;
+}
+
+.table-last-border tbody tr:last-child {
+  border-bottom: 1px solid rgba(213, 213, 215, 0.92);
+}
+
+
+.btn-group.special {
+  display: flex;
+}
+
+.special .btn {
+  flex: 1
+}
+
+.card-image-1 {
+  outline: 1px ghostwhite;
+  border: 1px solid transparent;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  opacity: 1;
+}
+
+.card-image-1:hover {
+  outline: 0px solid transparent;
+  border: 1px solid black;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  opacity: 0.5;
+}
+
+.card-image-2 {
+  outline: 1px ghostwhite;
+  border: 1px solid transparent;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  opacity: 1;
+}
+
+.card-image-2:hover {
+  outline: 0px solid transparent;
+  border: 1px solid black;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+
+
+/*Eliminates padding, centers the thumbnail */
+/*Eliminates padding, centers the thumbnail */
+
+
+/* Styles the thumbnail */
+
+/* Styles the lightbox, removes it from sight and adds the fade-in transition */
+
+.lightbox-target {
+position: fixed;
+top: -100%;
+width: 100%;
+background: rgba(0,0,0,.7);
+width: 100%;
+opacity: 0;
+-webkit-transition: opacity .5s ease-in-out;
+-moz-transition: opacity .5s ease-in-out;
+-o-transition: opacity .5s ease-in-out;
+transition: opacity .5s ease-in-out;
+overflow: hidden;
+
+}
+
+/* Styles the lightbox image, centers it vertically and horizontally, adds the zoom-in transition and makes it responsive using a combination of margin and absolute positioning */
+
+.lightbox-target img {
+margin: auto;
+position: absolute;
+top: 0;
+left:-43%;
+right:0;
+bottom: 0;
+max-height: 0%;
+max-width: 0%;
+border: 3px solid white;
+box-shadow: 0px 0px 8px rgba(0,0,0,.3);
+box-sizing: border-box;
+-webkit-transition: .5s ease-in-out;
+-moz-transition: .5s ease-in-out;
+-o-transition: .5s ease-in-out;
+transition: .5s ease-in-out;
+
+}
+
+/* Styles the close link, adds the slide down transition */
+
+a.lightbox-close {
+display: block;
+width:50px;
+height:50px;
+box-sizing: border-box;
+background: white;
+color: black;
+text-decoration: none;
+position: absolute;
+top: -70%;
+right: 18%;
+-webkit-transition: .5s ease-in-out;
+-moz-transition: .5s ease-in-out;
+-o-transition: .5s ease-in-out;
+transition: .5s ease-in-out;
+}
+
+/* Provides part of the "X" to eliminate an image from the close link */
+
+a.lightbox-close:before {
+content: "";
+display: block;
+height: 30px;
+width: 1px;
+background: black;
+position: absolute;
+left: 25px;
+top:9px;
+-webkit-transform:rotate(45deg);
+-moz-transform:rotate(45deg);
+-o-transform:rotate(45deg);
+transform:rotate(45deg);
+}
+
+/* Provides part of the "X" to eliminate an image from the close link */
+
+a.lightbox-close:after {
+content: "";
+display: block;
+height: 30px;
+width: 1px;
+background: black;
+position: absolute;
+left: 26px;
+top:10px;
+-webkit-transform:rotate(-45deg);
+-moz-transform:rotate(-45deg);
+-o-transform:rotate(-45deg);
+transform:rotate(-45deg);
+}
+
+/* Uses the :target pseudo-class to perform the animations upon clicking the .lightbox-target anchor */
+
+.lightbox-target:target {
+opacity: 1;
+top: 0;
+bottom: 0;
+  overflow:scroll;
+}
+
+.lightbox-target:target img {
+max-height: 100%;
+max-width: 100%;
+}
+
+.lightbox-target:target a.lightbox-close {
+top: 0;
+}
