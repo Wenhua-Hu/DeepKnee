@@ -13,8 +13,14 @@ from apps.home.forms import SearchForm
 from apps.home.models import query_patient, query_images, get_all_patients
 from apps.home.torch_gradcam import img_preprocess, farward_hook, backward_hook, fmap_block, grad_block, cam_show_img
 from apps.home.torch_models import get_model
-from run import app
+# from run import app
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_PATH = os.path.join(basedir,'../', 'static/assets/images')
+
+MODELS_PATH = os.path.join(basedir, 'data')
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 @blueprint.route('/', methods=['GET', 'POST'])
 def index():
@@ -66,13 +72,12 @@ def get_segment(request):
 
 
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = app.config['ALLOWED_EXTENSIONS']
+
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def model_predict(model_name="resnet34", filename='9001400L.png'):
     classes = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
     classes = list(classes.get(key) for key in range(5))
-    IMAGES_PATH = app.config['IMAGES_PATH']
 
     knee_dir = os.path.join(IMAGES_PATH, 'knee')
     gradcam_dir = os.path.join(IMAGES_PATH, 'gradcam')
@@ -83,6 +88,7 @@ def model_predict(model_name="resnet34", filename='9001400L.png'):
     gradcam_1_file_path = os.path.join(gradcam_dir, gradcam_1)
 
     img = cv2.imread(knee_image, 1)
+    print(knee_image)
     img_input = img_preprocess(img)
 
     net = get_model(model_name)
@@ -113,6 +119,7 @@ def model_predict(model_name="resnet34", filename='9001400L.png'):
 def predict():
     if request.method == 'POST':
         filename = request.form.get("filename")
+        print(filename)
 
         if filename is None or filename == "":
             return jsonify({'error': 'no file'})

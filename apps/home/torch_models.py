@@ -1,9 +1,14 @@
 import torch,os
 import torch.nn as nn
 from torchvision import models
-from run import app
+# from run import app
 
-MODELS_PATH = app.config['MODELS_PATH']
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+MODELS_PATH = os.path.join(basedir,'../', 'data')
+# MODELS_PATH = app.config['MODELS_PATH']
+
+
 
 class multi_output_model(nn.Module):
     def __init__(self, model_core, num_ftrs):
