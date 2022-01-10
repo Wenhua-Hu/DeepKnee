@@ -134,7 +134,7 @@ def predict():
         data = {
             'prediction': y.tolist(),
             'predicted_label': label.item(),
-            'heatmap_1': gradcam_1
+            'heatmaps_url': [gradcam_1,]
         }
         return jsonify(data)
 
