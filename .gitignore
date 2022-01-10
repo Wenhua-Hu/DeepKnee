@@ -31,4 +31,5 @@ apps/static/assets/node_modules
 apps/static/assets/yarn.lock
 apps/static/assets/.temp
 apps/data/*
+.idea/
 
