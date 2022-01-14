@@ -95,14 +95,13 @@ if __name__ == '__main__':
     image14 = Image(patient_id=1000654,title='9003126R',  filename='9003126R.png', cate='R',importdate='2022-01-02', importedtime='12:11:10', stamp_created='2022-01-02 12:11:10')
     image15 = Image(patient_id=1000654,title='9003430L', filename='9003430L.png', cate='L',importdate='2022-01-02', importedtime='12:10:16', stamp_created='2022-01-02 12:10:16')
     image16 = Image(patient_id=1000654,title='9004315L',  filename='9004315L.png',cate='L', importdate='2022-01-02', importedtime='14:10:16', stamp_created='2022-01-02 14:10:16')
-    # class 1
-    image1 = Image(patient_id=2000031,title='9007904R',  filename='9007904R.png', cate='R', importdate='2022-01-01', importedtime='12:10:10', stamp_created='2022-01-01 12:10:10')
-    image2 = Image(patient_id=2000031,title='9008820L',  filename='9008820L.png', cate='L',importdate='2022-01-01', importedtime='14:10:10', stamp_created='2022-01-01 14:10:10')
-    image3 = Image(patient_id=2000031,title='9008820R',  filename='9008820R.png',cate='R', importdate='2022-01-02', importedtime='16:10:10', stamp_created='2022-01-02 16:10:10')
-    image4 = Image(patient_id=2000031,title='9009623L',  filename='9009623L.png', cate='L',importdate='2022-01-02', importedtime='12:11:10', stamp_created='2022-01-02 12:11:10')
-    image5 = Image(patient_id=2000031,title='9010370L', filename='9010370L.png', cate='L',importdate='2022-01-02', importedtime='12:10:16', stamp_created='2022-01-02 12:10:16')
-    image6 = Image(patient_id=2000031,title='9010952L',  filename='9010952L.png',cate='L', importdate='2022-01-02', importedtime='14:10:16', stamp_created='2022-01-02 14:10:16')
-    image7 = Image(patient_id=2000031,title='9010952R',  filename='9010952R.png',cate='R', importdate='2022-01-03', importedtime='14:10:16', stamp_created='2022-01-03 14:10:16')
+    # class 4
+    image1 = Image(patient_id=2000031,title='9031426R',  filename='9031426R.png', cate='R', importdate='2022-01-01', importedtime='12:10:10', stamp_created='2022-01-01 12:10:10')
+    image2 = Image(patient_id=2000031,title='9025994L',  filename='9025994L.png', cate='L',importdate='2022-01-01', importedtime='14:10:10', stamp_created='2022-01-01 14:10:10')
+    image3 = Image(patient_id=2000031,title='9156694R',  filename='9156694R.png',cate='R', importdate='2022-01-02', importedtime='16:10:10', stamp_created='2022-01-02 16:10:10')
+    image4 = Image(patient_id=2000031,title='9039627L',  filename='9039627L.png', cate='L',importdate='2022-01-02', importedtime='12:11:10', stamp_created='2022-01-02 12:11:10')
+    image5 = Image(patient_id=2000031,title='9049507L', filename='9049507L.png', cate='L',importdate='2022-01-02', importedtime='12:10:16', stamp_created='2022-01-02 12:10:16')
+    image6 = Image(patient_id=2000031,title='9118430R',  filename='9118430R.png',cate='R', importdate='2022-01-03', importedtime='14:10:16', stamp_created='2022-01-03 14:10:16')
 
 
 
@@ -126,7 +125,6 @@ if __name__ == '__main__':
     db.session.add(image4)
     db.session.add(image5)
     db.session.add(image6)
-    db.session.add(image7)
 
 
 

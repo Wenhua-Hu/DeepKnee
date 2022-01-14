@@ -15,15 +15,22 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    IMAGES_PATH = os.path.join(basedir, 'static/assets/images')
-
-    MODELS_PATH = os.path.join(basedir, 'data')
-
+    # the type of images
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+    # directory list
+    datadir = os.path.join(basedir, 'data')
+    MODELS_PATH = os.path.join(datadir, 'models')
+    IMAGES_KNEE_ORIGINAL = os.path.join(datadir, 'knee_original')
+    IMAGES_KNEE_LIME = os.path.join(datadir, 'knee_lime')
+    IMAGES_KNEE_GRADCAM = os.path.join(datadir, 'knee_gradcam')
+    IMAGES_KNEE_BBOX = os.path.join(datadir, 'knee_boundingbox')
+
+    RESNET34 = os.path.join(MODELS_PATH, 'resnet_0.pth')
 
 
 class ProductionConfig(Config):
-    DEBUG = True
+    DEBUG = False
 
     # Security
     SESSION_COOKIE_HTTPONLY = True

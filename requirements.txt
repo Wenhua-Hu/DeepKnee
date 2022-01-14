@@ -15,4 +15,5 @@ Flask-Bootstrap4
 git+https://github.com/ildoonet/cutmix
 pytorch-gradcam=0.2.1
 grad-cam
+lime
 
