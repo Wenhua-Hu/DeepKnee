@@ -14,11 +14,10 @@ class cal_cam(nn.Module):
         self.model = model
         self.device = device
         self.model.to(self.device)
-        # 要求梯度的层
+
         self.feature_layer = feature_layer
-        # 记录梯度
         self.gradient = []
-        # 记录输出的特征图
+        # record the feature map
         self.output = []
         self.means = [0.53995493] * 3
         self.stds = [0.27281794] * 3
@@ -47,7 +46,6 @@ class cal_cam(nn.Module):
         input_ = input_.to(self.device).requires_grad_(True)
         input = self.forward(input_)
 
-        # 到这里input就是最后全连接层的输出了
         index = torch.max(input, dim=-1)[1]
         one_hot = torch.zeros((1, input.shape[-1]), dtype=torch.float32)
         one_hot[0][index] = 1
@@ -55,30 +53,29 @@ class cal_cam(nn.Module):
         confidenct = torch.sum(confidenct, dim=-1).requires_grad_(True)
         # print(confidenct)
         self.model.zero_grad()
-        # 反向传播获取梯度
+        # backpropogate to get th gredient
         confidenct.backward(retain_graph=True)
-        # 获取特征图的梯度
+        # get the gradient of feature map
         grad_val = self.get_grad()
         feature = self.get_feature()
         return grad_val, feature, input_.grad
 
     # 计算CAM
     def getCam(self, grad_val, feature):
-        # 对特征图的每个通道进行全局池化
+        # GVP for per channel
         alpha = torch.mean(grad_val, dim=(2, 3)).cpu()
         feature = feature.cpu()
-        # 将池化后的结果和相应通道特征图相乘
+
         cam = torch.zeros((feature.shape[2], feature.shape[3]), dtype=torch.float32)
         for idx in range(alpha.shape[1]):
             cam = cam + alpha[0][idx] * feature[0][idx]
-        # 进行ReLU操作
+        # ReLu
         cam = np.maximum(cam.detach().numpy(), 0)
 
         plt.imshow(cam)
         plt.colorbar()
         plt.savefig(os.path.join(self.outdir,self.name + '_gradcam_0.png'))
 
-        # 将cam区域放大到输入图片大小
         cam_ = cv2.resize(cam, (299, 299))
         cam_ = cam_ - np.min(cam_)
         cam_ = cam_ / np.max(cam_)
@@ -122,16 +119,16 @@ class gradcam_resnet(cal_cam):
                         input = module(input_)
                         num = num + 1
                         continue
-                    # 是待提取特征图的层
+
                     if (name == self.feature_layer):
                         input = module(input)
                         input.register_hook(self.save_grad)
                         self.output.append([input])
-                    # 马上要到全连接层了
+
                     elif (name == "avgpool"):
                         input = module(input)
                         input = input.reshape(input.shape[0], -1)
-                    # 普通的层
+
                     else:
                         input = module(input)
 
