@@ -22,10 +22,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class CalLime(object):
 
-    def __init__(self, model, img_path, output):
+    def __init__(self, model, img_path, outdir, num_samples=1000):
         self.model = model
         self.img_path = img_path
-        self.output = output
+        self.outdir = outdir
+        self.num_samples =num_samples
         self.pil_img = self.image_preprocess()
         self.pil_transform = self.get_pil_transform(299)
         self.preprocess_transform = self.get_preprocess_transform()
@@ -82,13 +83,14 @@ class CalLime(object):
                                                  self.batch_predict,
                                                  top_labels=1,
                                                  hide_color=0,
-                                                 num_samples=1000)
+                                                 num_samples=self.num_samples)
 
         # get overlay
         temp, mask = explanation.get_image_and_mask(explanation.top_labels[0], positive_only=True, num_features=5,
                                                     hide_rest=False)
         img_boundary = mark_boundaries(temp / 255.0, mask)
-
-        plt.imsave(self.output, img_boundary)
+        filename = os.path.basename(self.img_path)
+        name = os.path.splitext(filename)[0]
+        plt.imsave(os.path.join(self.outdir, name + '_lime.png'), img_boundary)
 
 

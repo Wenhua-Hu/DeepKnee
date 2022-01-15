@@ -79,7 +79,7 @@
 
                                 <div class="card no-gutters mb-0 card-image-1" style="height: 100px"
                                      filename="{{ img.filename }}"
-                                     pic_url="./static/assets/images/knee/{{ img.filename }}" xray="{{ img.cate }}">
+                                     pic_url="./static/assets/images/knee_original/{{ img.filename }}" xray="{{ img.cate }}">
                                     <div class="row no-gutters">
                                         <div class="col-md-7">
                                             <div class="card-body">
@@ -92,7 +92,7 @@
                                         </div>
 
                                         <div class="col-md-5 justify-content-end text-right">
-                                            <img class="" src="./static/assets/images/knee/{{ img.filename }}"
+                                            <img class="" src="./static/assets/images/knee_original/{{ img.filename }}"
                                                  class="card-img" style="width:100px;height:100px;">
                                         </div>
                                     </div>
@@ -207,14 +207,14 @@
                                 <div class="card-group card-thumbnail">
 
                                     <div class="card">
-                                        <img src=".\static\assets\images\knee\9001400L.png"
+                                        <img src=".\static\assets\images\knee_original\9001400L.png"
                                              class="card-img-top img-thumbnail rounded-0 mx-auto d-block" height="100px"
                                              width="100px"
                                              alt="...">
 
                                     </div>
                                     <div class="card">
-                                        <img src=".\static\assets\images\knee\9001400L.png"
+                                        <img src=".\static\assets\images\knee_original\9001400L.png"
                                              class="card-img-top img-thumbnail rounded-0 mx-auto d-block" height="100px"
                                              width="100px"
                                              alt="...">
@@ -225,31 +225,31 @@
 
                                 <h6 class="text-uppercase text-body text-xs font-weight-bolder mt-4 pt-4">KL Classifers
                                     :</h6>
-                                <table class="table table-sm table-striped">
+                                <table class="table table-sm table-striped model-choice" >
                                     <tbody>
                                     <tr>
+                                        <td >
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="models"
+                                                       id="vgg11"
+                                                       value="vgg11">
+                                                <label class="form-check-label" for="inlineRadio1">VGG11</label>
+                                            </div>
+                                        </td>
                                         <td>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                       id="inlineRadio1"
-                                                       value="option1">
+                                                <input class="form-check-input" type="radio" name="models"
+                                                       id="vgg16"
+                                                       value="vgg16">
                                                 <label class="form-check-label" for="inlineRadio1">VGG16</label>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                       id="inlineRadio1"
-                                                       value="option1">
-                                                <label class="form-check-label" for="inlineRadio1">VGG16</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                       id="inlineRadio1"
-                                                       value="option1">
-                                                <label class="form-check-label" for="inlineRadio1">VGG16</label>
+                                                <input class="form-check-input" type="radio" name="models"
+                                                       id="vgg19"
+                                                       value="vgg19">
+                                                <label class="form-check-label" for="inlineRadio1">VGG19</label>
                                             </div>
                                         </td>
                                     </tr>
@@ -257,26 +257,26 @@
                                     <tr>
                                         <td>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                       id="inlineRadio1"
-                                                       value="option1" checked>
+                                                <input class="form-check-input" type="radio" name="models"
+                                                       id="resnet34"
+                                                       value="resnet34" checked>
                                                 <label class="form-check-label" for="inlineRadio1">RESNET34</label>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                       id="inlineRadio1"
-                                                       value="option1">
-                                                <label class="form-check-label" for="inlineRadio1">RESNET101</label>
+                                                <input class="form-check-input" type="radio" name="models"
+                                                       id="resnet50"
+                                                       value="resnet50">
+                                                <label class="form-check-label" for="inlineRadio1">RESNET50</label>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                       id="inlineRadio1"
-                                                       value="option1">
-                                                <label class="form-check-label" for="inlineRadio1">RESNET200</label>
+                                                <input class="form-check-input" type="radio" name="models"
+                                                       id="resnet101"
+                                                       value="resnet101">
+                                                <label class="form-check-label" for="inlineRadio1">RESNET101</label>
                                             </div>
                                         </td>
                                     </tr>

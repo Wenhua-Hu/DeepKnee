@@ -1,4 +1,4 @@
-import cv2
+import cv2, os
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -9,7 +9,7 @@ from PIL import Image
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class cal_cam(nn.Module):
-    def __init__(self, model, output1, output2, output3, feature_layer):
+    def __init__(self, model, outdir, feature_layer):
         super(cal_cam, self).__init__()
         self.model = model
         self.device = device
@@ -22,9 +22,7 @@ class cal_cam(nn.Module):
         self.output = []
         self.means = [0.53995493] * 3
         self.stds = [0.27281794] * 3
-        self.output1 = output1
-        self.output2 = output2
-        self.output3 = output3
+        self.outdir = outdir
 
         self.transform = tfs.Compose([
             tfs.ToTensor(),
@@ -78,14 +76,14 @@ class cal_cam(nn.Module):
 
         plt.imshow(cam)
         plt.colorbar()
-        plt.savefig(self.output1)
+        plt.savefig(os.path.join(self.outdir,self.name + '_gradcam_0.png'))
 
         # 将cam区域放大到输入图片大小
         cam_ = cv2.resize(cam, (299, 299))
         cam_ = cam_ - np.min(cam_)
         cam_ = cam_ / np.max(cam_)
         plt.imshow(cam_)
-        plt.savefig(self.output1)
+        plt.savefig(os.path.join(self.outdir,self.name + '_gradcam_1.png'))
         cam = torch.from_numpy(cam)
 
         return cam, cam_
@@ -94,9 +92,11 @@ class cal_cam(nn.Module):
         heatmap = cv2.applyColorMap(np.uint8(255 * cam_), cv2.COLORMAP_JET)
 
         cam_img = 0.3 * heatmap + 0.7 * np.float32(img)
-        cv2.imwrite(self.output1, cam_img)
+        cv2.imwrite(os.path.join(self.outdir,self.name + '_gradcam.png'), cam_img)
 
     def __call__(self, img_root):
+        filename = os.path.basename(img_root)
+        self.name = os.path.splitext(filename)[0]
         img = Image.open(img_root)
         img = img.resize((299, 299))
         img = img.convert("RGB")
@@ -110,8 +110,8 @@ class cal_cam(nn.Module):
 
 class gradcam_resnet(cal_cam):
 
-    def __init__(self, model, output1, output2, output3):
-        super(gradcam_resnet, self).__init__(model, output1, output2, output3, "layer4")
+    def __init__(self, model, outdir):
+        super(gradcam_resnet, self).__init__(model, outdir, "layer4")
 
     def forward(self, input_):
         num = 1

@@ -20,13 +20,16 @@ class Config(object):
 
     # directory list
     datadir = os.path.join(basedir, 'data')
-    MODELS_PATH = os.path.join(datadir, 'models')
-    IMAGES_KNEE_ORIGINAL = os.path.join(datadir, 'knee_original')
-    IMAGES_KNEE_LIME = os.path.join(datadir, 'knee_lime')
-    IMAGES_KNEE_GRADCAM = os.path.join(datadir, 'knee_gradcam')
-    IMAGES_KNEE_BBOX = os.path.join(datadir, 'knee_boundingbox')
 
-    RESNET34 = os.path.join(MODELS_PATH, 'resnet_0.pth')
+    MODELS_PATH = os.path.join(datadir, 'models')
+
+    imagedir = os.path.join(basedir, 'static/assets/images')
+    IMAGES_KNEE_ORIGINAL = os.path.join(imagedir, 'knee_original')
+    IMAGES_KNEE_LIME = os.path.join(imagedir, 'knee_lime')
+    IMAGES_KNEE_GRADCAM = os.path.join(imagedir, 'knee_gradcam')
+    IMAGES_KNEE_BBOX = os.path.join(imagedir, 'knee_boundingbox')
+
+    RESNET34 = os.path.join(MODELS_PATH, 'resnet34_0.pth')
 
 
 class ProductionConfig(Config):

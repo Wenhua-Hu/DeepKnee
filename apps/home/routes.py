@@ -70,11 +70,11 @@ def predict_lime():
 
     model = load_model(modelname, current_app.config[modelname.upper()])
 
-    clime = lime_.CalLime(model, img_path, output_lime)
+    clime = lime_.CalLime(model, img_path, IMAGES_KNEE_LIME, 100)
     clime.lime_predict()
 
     data = {
-        'output_lime': output_lime
+        'output_lime': os.path.splitext(filename)[0] + '_lime.png'
     }
     return jsonify(data)
 
@@ -125,21 +125,18 @@ def predict_gradcam():
     IMAGES_KNEE_GRADCAM = current_app.config['IMAGES_KNEE_GRADCAM']
 
     img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
-    output1 = os.path.join(IMAGES_KNEE_GRADCAM, os.path.splitext(filename)[0] + '_gradcam_1.png')
-    output2 = os.path.join(IMAGES_KNEE_GRADCAM, os.path.splitext(filename)[0] + '_gradcam_2.png')
-    output3 = os.path.join(IMAGES_KNEE_GRADCAM, os.path.splitext(filename)[0] + '_gradcam_3.png')
 
     model = load_model(modelname, current_app.config[modelname.upper()])
 
     if modelname == 'resnet34' or model.name == 'resnet34':
-        gradcam_model = gradcam_resnet(model, filename, output1, output2, output3)
+        gradcam_model = gradcam_resnet(model, IMAGES_KNEE_GRADCAM)
 
     gradcam_model(img_path)
 
     data = {
-        'output1': output1,
-        'output2': output2,
-        'output3': output3
+        'output0':  os.path.splitext(filename)[0] + '_gradcam_0.png',
+        'output1': os.path.splitext(filename)[0] + '_gradcam_1.png',
+        'output':  os.path.splitext(filename)[0] + '_gradcam.png'
     }
 
     return jsonify(data)
