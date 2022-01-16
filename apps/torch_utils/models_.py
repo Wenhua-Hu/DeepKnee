@@ -1,7 +1,6 @@
 import os
 import torch
 import torch.nn as nn
-from flask import current_app
 from torchvision import models
 
 
@@ -27,7 +26,6 @@ class multi_output_model(nn.Module):
         return y1o, y2o
 
 
-
 def load_model(model_name,model_path):
     if model_name.lower() == "resnet34":
         model = models.resnet34(pretrained=False)
@@ -36,7 +34,7 @@ def load_model(model_name,model_path):
         model.fc = nn.Sequential()
         model = multi_output_model(model, num_features)
 
-        model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load(model_path, map_location=device))
         model.name = "resnet34"
 
     else:

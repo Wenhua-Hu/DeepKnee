@@ -17,6 +17,11 @@ from apps.torch_utils import lime_
 from apps.torch_utils.gradcam import gradcam_resnet
 from apps.torch_utils.models_ import load_model
 
+from apps.torch_utils.bounding_box import draw_boundingbox
+
+from PIL import Image
+
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
@@ -65,8 +70,6 @@ def predict_lime():
     IMAGES_KNEE_LIME = current_app.config['IMAGES_KNEE_LIME']
 
     img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
-
-    output_lime = os.path.join(IMAGES_KNEE_LIME, os.path.splitext(filename)[0] + '_lime.png')
 
     model = load_model(modelname, current_app.config[modelname.upper()])
 
@@ -123,6 +126,7 @@ def predict_gradcam():
 
     IMAGES_KNEE_ORIGINAL = current_app.config['IMAGES_KNEE_ORIGINAL']
     IMAGES_KNEE_GRADCAM = current_app.config['IMAGES_KNEE_GRADCAM']
+    IMAGES_KNEE_BBOX = current_app.config['IMAGES_KNEE_BBOX']
 
     img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
 
@@ -131,12 +135,14 @@ def predict_gradcam():
     if modelname == 'resnet34' or model.name == 'resnet34':
         gradcam_model = gradcam_resnet(model, IMAGES_KNEE_GRADCAM)
 
-    gradcam_model(img_path)
+    _, cam_ = gradcam_model(img_path)
+    print(np.max(cam_), np.min(cam_))
+    draw_boundingbox(cam_, img_path, IMAGES_KNEE_BBOX)
 
-    data = {
-        'output0':  os.path.splitext(filename)[0] + '_gradcam_0.png',
-        'output1': os.path.splitext(filename)[0] + '_gradcam_1.png',
-        'output':  os.path.splitext(filename)[0] + '_gradcam.png'
-    }
+
+    data = dict()
+    data['output_gradcam'] = os.path.splitext(filename)[0] + '_gradcam.png'
+    data['output_bbox'] = os.path.splitext(filename)[0] + '_boundingbox.png'
+    print(data['output_bbox'])
 
     return jsonify(data)

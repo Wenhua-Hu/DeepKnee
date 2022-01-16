@@ -60,7 +60,6 @@ class cal_cam(nn.Module):
         feature = self.get_feature()
         return grad_val, feature, input_.grad
 
-    # 计算CAM
     def getCam(self, grad_val, feature):
         # GVP for per channel
         alpha = torch.mean(grad_val, dim=(2, 3)).cpu()
@@ -102,7 +101,8 @@ class cal_cam(nn.Module):
         grad_val, feature, input_grad = self.getGrad(input)
         cam, cam_ = self.getCam(grad_val, feature)
         self.show_img(cam_, img)
-        return cam
+
+        return cam, cam_
 
 
 class gradcam_resnet(cal_cam):
