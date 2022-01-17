@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import torchvision.transforms as tfs
 from PIL import Image
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -84,11 +85,39 @@ class cal_cam(nn.Module):
 
         return cam, cam_
 
+    # def show_img(self, cam_, img):
+    #     heatmap = cv2.applyColorMap(np.uint8(255 * cam_), cv2.COLORMAP_JET)
+    #
+    #     cam_img = 0.3 * heatmap + 0.7 * np.float32(img)
+    #     cv2.imwrite(os.path.join(self.outdir,self.name + '_gradcam.png'), cam_img)
+
     def show_img(self, cam_, img):
         heatmap = cv2.applyColorMap(np.uint8(255 * cam_), cv2.COLORMAP_JET)
-
         cam_img = 0.3 * heatmap + 0.7 * np.float32(img)
-        cv2.imwrite(os.path.join(self.outdir,self.name + '_gradcam.png'), cam_img)
+        cam_img_resized = cam_img / 255
+        # Separated the channels in my new image
+        b = cam_img_resized[:, :, 0]
+        g = cam_img_resized[:, :, 1]
+        r = cam_img_resized[:, :, 2]
+        # Stacked the channels
+        cam_rgb = np.dstack([r, g, b])
+        fig, ax = plt.subplots()
+        axins = inset_axes(ax,
+                           width="40%",  # width = 5% of parent_bbox width
+                           height="5%",  # height : 50%
+                           loc='lower right',
+                           )
+        im = ax.imshow(cam_rgb)
+        ax.axis('off')
+        min_color = np.min(cam_img_resized)
+        max_color = np.max(cam_img_resized)
+        tick_pos = [min_color + 0.1 * (max_color - min_color), max_color + 0.1 * (min_color - max_color)]
+        cbar = fig.colorbar(im, cax=axins, orientation='horizontal', ticks=tick_pos)
+        axins.xaxis.set_ticks_position("top")
+        cbar.ax.set_xticklabels(['Low', 'High'])
+        fig.savefig(os.path.join(self.outdir, self.name + '_gradcam.png'), bbox_inches='tight', pad_inches=0)
+        # cv2.imwrite(os.path.join(self.outdir, self.name + '_gradcam.png'), cam_img)
+        return cam_img
 
     def __call__(self, img_root):
         filename = os.path.basename(img_root)

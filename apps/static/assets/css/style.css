@@ -2806,7 +2806,7 @@ p.text-muted {
 .pcoded-content {
   position: relative;
   display: block;
-  padding: 30px;
+  padding: 10px 10px 20px 10px;
 }
 
 .pcoded-main-container {
