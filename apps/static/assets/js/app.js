@@ -1,13 +1,30 @@
 $(function () {
     $(".card.card-image-1").click(function () {
+        url = $(this).attr('pic_url');
+        LR = $(this).attr('xray');
+        src= './static/assets/images/default.png'
 
-            url = $(this).attr('pic_url');
-            LR = $(this).attr('xray');
+        $('.card-thumbnail img').attr('src', src);
 
             if (LR == 'L') {
+                $('.card-image-l a.card-image-hm').each(function (k, element) {
+                    $(element).find('img').attr('src', src);
+                });
+
+                $('.card-image-l div.card-image-hm-pop').each(function (k, element) {
+                    $(element).find('img').attr('src', src);
+                });
+
                 $('.card-image-l a.card-image-org img').attr('src', url);
                 $('.card-image-l div.card-image-org-pop img').attr('src', url);
             } else if (LR == 'R') {
+                $('.card-image-r a.card-image-hm').each(function (k, element) {
+                    $(element).find('img').attr('src', src);
+                });
+                $('.card-image-r div.card-image-hm-pop').each(function (k, element) {
+                    $(element).find('img').attr('src', src);
+                });
+
                 $('.card-image-r a.card-image-org img').attr('src', url);
                 $('.card-image-r div.card-image-org-pop img').attr('src', url);
             }
@@ -78,27 +95,30 @@ $(function () {
         model_name = $('input[name=models]:checked').val();
         LR = $(this).attr('xray');
 
-        // const loadText = document.querySelector(".loading-text");
-        //
-        // let load = 0;
-        // let samples = 100;
-        // let int = setInterval(blurring,samples*2);
-        //
-        // function blurring(){
-        //   load++
-        //   if(load>99){
-        //     clearInterval(int);
-        //   }
-        //   loadText.innerText = `${load}%`
-        //   loadText.style.opacity = scale(load, 0, 100, 1, 0)
-        // }
-        // const scale = (num, in_min, in_max, out_min, out_max) => {
-        //   return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
-        // }
+        let n_samples = 100;
 
-        $.post("/predict_lime", {filename: image_name, modelname: model_name}, function(data) {
+        const loadText = document.querySelector(".loading-text");
+
+        let load = 0;
+        let int = setInterval(blurring,n_samples*3);
+
+        function blurring(){
+          load++
+          if(load>98){
+            clearInterval(int);
+          }
+          loadText.innerText = `${load}%`
+          // loadText.style.opacity = scale(load, 0, 100, 1, 0)
+        }
+        const scale = (num, in_min, in_max, out_min, out_max) => {
+          return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
+        }
+
+        $.post("/predict_lime", {filename: image_name, modelname: model_name, nsamples: n_samples}, function(data) {
             lime_path = data['output_lime']
             $('.card-thumbnail img:eq(2)').attr('src', './static/assets/images/knee_lime/' + lime_path);
+            // const loadText = document.querySelector(".loading-text");
+            // loadText.style.opacity = scale(100, 0, 100, 1, 0)
         }, "json");
     });
 

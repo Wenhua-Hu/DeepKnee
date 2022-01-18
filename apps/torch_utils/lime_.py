@@ -22,7 +22,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class CalLime(object):
 
-    def __init__(self, model, img_path, outdir, num_samples=1000):
+    def __init__(self, model, img_path, outdir, num_samples):
         self.model = model
         self.img_path = img_path
         self.outdir = outdir
@@ -46,7 +46,7 @@ class CalLime(object):
     def get_preprocess_transform(self):
         transf = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize([0.53995493] * 3, [0.27281794] * 3)
+            transforms.Normalize([0.66133188] * 3, [0.21229856] * 3)
         ])
 
         return transf
@@ -71,7 +71,7 @@ class CalLime(object):
         batch = batch.to(device)
 
         logits = self.model(batch)
-        probs = F.softmax(logits[1], dim=1)
+        probs = F.softmax(logits, dim=1)
         return probs.detach().cpu().numpy()
 
     def lime_predict(self):
@@ -93,4 +93,8 @@ class CalLime(object):
         name = os.path.splitext(filename)[0]
         plt.imsave(os.path.join(self.outdir, name + '_lime.png'), img_boundary)
 
+
+def lime_run(model, img_path, IMAGES_KNEE_LIME, num_samples):
+    clime = CalLime(model, img_path, IMAGES_KNEE_LIME, num_samples)
+    clime.lime_predict()
 

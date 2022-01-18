@@ -1,0 +1,56 @@
+<div class="col-md-2 pr-0 mr-0">
+    <div class="card  rounded-0 h-25 mb-2"
+         style="background-image: linear-gradient(0deg, rgba(123,122,126,0.92) 0%, #d3d7d5 100%);">
+        <div class="card-body col-md-12">
+
+            <h6 class="text-uppercase text-body text-xs font-weight-bolder mt-0 pt-0 mb-4 text-secondary">
+                Patient
+                Information :</h6>
+            <table class="table table-sm table-borderless">
+                <tbody>
+                <tr>
+                    <th>Medical NO.</th>
+                    <td>{{ patient.id }}</td>
+                </tr>
+                <tr>
+                    <th>Full Name</th>
+                    <td>{{ patient.name }}</td>
+                </tr>
+                <tr>
+                    <th>Birth of Date</th>
+                    <td>{{ patient.birthdate }}</td>
+                </tr>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card  rounded-0 example-1 scrollbar-deep-purple bordered-deep-purple thin h-75">
+        <div id="images">
+            {% for img in images %}
+
+                <div class="card no-gutters mb-0 card-image-1" style="height: 100px"
+                     filename="{{ img.filename }}"
+                     pic_url="./static/assets/images/knee_original/{{ img.filename }}"
+                     xray="{{ img.cate }}">
+                    <div class="row no-gutters">
+                        <div class="col-md-7">
+                            <div class="card-body">
+                                <p class="card-text">{{ img.title }} - {{ img.cate }}</p>
+
+                                <p class="card-text">
+                                    <small class="text-muted">{{ img.importdate }} {{ img.importedtime }}</small>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 justify-content-end text-right">
+                            <img class="" src="./static/assets/images/knee_original/{{ img.filename }}"
+                                 class="card-img" style="width:100px;height:100px;">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

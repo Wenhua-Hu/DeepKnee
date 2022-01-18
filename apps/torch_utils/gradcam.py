@@ -20,8 +20,8 @@ class cal_cam(nn.Module):
         self.gradient = []
         # record the feature map
         self.output = []
-        self.means = [0.53995493] * 3
-        self.stds = [0.27281794] * 3
+        self.means = [0.66133188] * 3
+        self.stds = [0.21229856] * 3
         self.outdir = outdir
 
         self.transform = tfs.Compose([
@@ -134,10 +134,10 @@ class cal_cam(nn.Module):
         return cam, cam_
 
 
-class gradcam_resnet(cal_cam):
+class gradcam_sample(cal_cam):
 
     def __init__(self, model, outdir):
-        super(gradcam_resnet, self).__init__(model, outdir, "layer4")
+        super(gradcam_sample, self).__init__(model, outdir, "layer4")
 
     def forward(self, input_):
         num = 1
@@ -165,4 +165,127 @@ class gradcam_resnet(cal_cam):
                 input = module(input)
 
         return input
+
+
+class gradcam_resnet(cal_cam):
+
+    def __init__(self, model, outdir):
+        super(gradcam_resnet, self).__init__(model, outdir, "layer4")
+
+    def forward(self, input_):
+        num = 1
+        for name, module in self.model._modules.items():
+            if (num == 1):
+                input = module(input_)
+                num = num + 1
+                continue
+
+            if (name == self.feature_layer):
+                input = module(input)
+                input.register_hook(self.save_grad)
+                self.output.append([input])
+
+            elif (name == "avgpool"):
+                input = module(input)
+                input = input.reshape(input.shape[0], -1)
+
+            else:
+                input = module(input)
+
+        return input
+
+
+class gradcam_vgg(cal_cam):
+
+    def __init__(self, model, outdir):
+        super(gradcam_resnet, self).__init__(model, outdir, "layer4")
+
+    def forward(self, input_):
+        num = 1
+        for name, module in self.model._modules.items():
+            if (num == 1):
+                input = module(input_)
+                num = num + 1
+                continue
+
+            if (name == self.feature_layer):
+                input = module(input)
+                input.register_hook(self.save_grad)
+                self.output.append([input])
+
+            elif (name == "avgpool"):
+                input = module(input)
+                input = input.reshape(input.shape[0], -1)
+
+            else:
+                input = module(input)
+
+        return input
+
+class gradcam_dense(cal_cam):
+
+    def __init__(self, model, outdir):
+        super(gradcam_resnet, self).__init__(model, outdir, "layer4")
+
+    def forward(self, input_):
+        num = 1
+        for name, module in self.model._modules.items():
+            if (num == 1):
+                input = module(input_)
+                num = num + 1
+                continue
+
+            if (name == self.feature_layer):
+                input = module(input)
+                input.register_hook(self.save_grad)
+                self.output.append([input])
+
+            elif (name == "avgpool"):
+                input = module(input)
+                input = input.reshape(input.shape[0], -1)
+
+            else:
+                input = module(input)
+
+        return input
+
+
+class gradcam_inception(cal_cam):
+
+    def __init__(self, model, outdir):
+        super(gradcam_inception, self).__init__(model, outdir, "Mixed_7c")
+
+    def forward(self, input_):
+        num = 1
+        for name, module in self.model._modules.items():
+            if (num == 1):
+                input = module(input_)
+                num = num + 1
+                continue
+
+            if (name == self.feature_layer):
+                input = module(input)
+                input.register_hook(self.save_grad)
+                self.output.append([input])
+
+            elif (name == "avgpool"):
+                input = module(input)
+                input = input.reshape(input.shape[0], -1)
+
+            else:
+                input = module(input)
+
+        return input
+
+
+# add models
+def get_gradcam(model, img_path, outdir):
+    if model.name in ("resnet18", "resnet34", "resnet50", "resnet101"):
+        gradcam_model = gradcam_resnet(model, outdir)
+
+    _, cam_ = gradcam_model(img_path)
+    return cam_
+
+
+
 

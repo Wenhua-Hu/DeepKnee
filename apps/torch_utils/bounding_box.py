@@ -117,7 +117,7 @@ class Groupmatrix(object):
 
   def __init__(self, heatmap, intensity = 100):
     self.heatmap = self.normalize_heatmap(heatmap)
-    print("bbox:", np.max(self.heatmap), np.min(self.heatmap))
+    # print("bbox:", np.max(self.heatmap), np.min(self.heatmap))
     self.intensity = intensity
     self.groups = []
     self.mat = self.heatmap > self.intensity # transform matrix into binaries (False,True)
@@ -195,7 +195,7 @@ class HeatmapSquares(object):
     heatmap = Image.open(image_path)
     image = heatmap.convert('RGB')
     image = np.asarray(image)
-    print(image.shape)
+
     return image
 
   @staticmethod
@@ -282,9 +282,9 @@ class HeatmapSquares(object):
 
 def draw_boundingbox(image_gradcam, image_path, outdir):
   group_class = Groupmatrix(image_gradcam, 140)
-  print("draw_boundingbox:",np.min(group_class.heatmap), np.max(group_class.heatmap), np.sum(group_class.mat))
+  # print("draw_boundingbox:",np.min(group_class.heatmap), np.max(group_class.heatmap), np.sum(group_class.mat))
   group_class.find_groups()
-  print("groups:",group_class.groups)
+
   out_groups = group_class.return_groups(625, 0.03)
 
   # Draw groups

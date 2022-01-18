@@ -17,6 +17,7 @@ venv
 
 # other
 .DS_Store
+.idea/
 
 # sphinx docs 
 _build
@@ -27,10 +28,16 @@ _templates
 package-lock.json
 .vscode/symbols.json
 
+# ide
 apps/static/assets/node_modules
 apps/static/assets/yarn.lock
 apps/static/assets/.temp
+
+# materials
 apps/data/images/train
 apps/data/models
 apps/data/ModelWeights
-.idea/
+
+# test
+tests/
+!tests/unit_test.py

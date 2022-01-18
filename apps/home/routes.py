@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-
 import os
 
 import cv2
@@ -13,31 +12,60 @@ from flask import render_template, request, jsonify
 from apps.home import blueprint
 from apps.home.forms import SearchForm
 from apps.home.models import query_patient, query_images, get_all_patients
-from apps.torch_utils import lime_
-from apps.torch_utils.gradcam import gradcam_resnet
-from apps.torch_utils.models_ import load_model
-
 from apps.torch_utils.bounding_box import draw_boundingbox
-
-from PIL import Image
-
+from apps.torch_utils.gradcam import get_gradcam
+from apps.torch_utils.lime_ import lime_run
+from apps.torch_utils.models_ import load_model
 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 
-def img_preprocess(img_in):
+def img_preprocess(img_path):
+    img_in = cv2.imread(img_path, 1)
     img = img_in.copy()
     img = img[:, :, ::-1]
     img = np.ascontiguousarray(img)
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize([0.53995493] * 3, [0.27281794] * 3)
+        transforms.Normalize([0.66133188] * 3, [0.21229856] * 3)
     ])
     img = transform(img)
     img = img.unsqueeze(0)
     return img
+
+
+def model_predict(model, img_input):
+    model.eval()
+    model.zero_grad()
+
+    # add models
+    if model.name in ("resnet18", 'resnet50'):
+        output = model(img_input)
+    else:
+        output = model(img_input)
+
+    y_proba = F.softmax(output, dim=-1)
+    y = torch.squeeze(y_proba)
+    label = torch.argmax(y)
+
+    return y, label
+
+
+def get_request_data(request):
+    if request.method != 'POST':
+        return jsonify({'error': 'request method is not proper'})
+
+    filename = request.form.get("filename")
+    modelname = request.form.get("modelname")
+    if 'nsamples' in list(request.form.keys()):
+        nsamples = int(request.form.get("nsamples"))
+    else:
+        nsamples = 0
+
+
+    return filename, modelname, nsamples
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -60,21 +88,20 @@ def index():
 
 @blueprint.route('/predict_lime', methods=['POST', 'GET'])
 def predict_lime():
-    if request.method != 'POST':
-        return jsonify({'error': 'request method is not proper'})
 
-    filename = request.form.get("filename")
-    modelname = request.form.get("modelname")
 
     IMAGES_KNEE_ORIGINAL = current_app.config['IMAGES_KNEE_ORIGINAL']
     IMAGES_KNEE_LIME = current_app.config['IMAGES_KNEE_LIME']
+
+    filename, modelname, num_samples = get_request_data(request)
+
+
 
     img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
 
     model = load_model(modelname, current_app.config[modelname.upper()])
 
-    clime = lime_.CalLime(model, img_path, IMAGES_KNEE_LIME, 100)
-    clime.lime_predict()
+    lime_run(model, img_path, IMAGES_KNEE_LIME, num_samples)
 
     data = {
         'output_lime': os.path.splitext(filename)[0] + '_lime.png'
@@ -84,65 +111,34 @@ def predict_lime():
 
 @blueprint.route('/predict_score', methods=['POST', 'GET'])
 def predict_score():
-    if request.method != 'POST':
-        return jsonify({'error': 'request method is not proper'})
-
-    filename = request.form.get("filename")
-    modelname = request.form.get("modelname")
-
     IMAGES_KNEE_ORIGINAL = current_app.config['IMAGES_KNEE_ORIGINAL']
 
-    img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
+    filename, modelname, _ = get_request_data(request)
 
-    img = cv2.imread(img_path, 1)
-    img_input = img_preprocess(img)
+    img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
+    img_input = img_preprocess(img_path)
 
     model = load_model(modelname, current_app.config[modelname.upper()])
+    y, label = model_predict(model, img_input)
 
-    model.eval()
-    model.zero_grad()
-
-    if model.name == "resnet34":
-        _, output = model(img_input)
-
-    y_proba = F.softmax(output, dim=-1)
-    y = torch.squeeze(y_proba)
-    label = torch.argmax(y)
-
-    data = {
-        'prediction': y.tolist(),
-        'predicted_label': label.item()
-    }
-    return jsonify(data)
+    return jsonify({'prediction': y.tolist(), 'predicted_label': label.item()})
 
 
 @blueprint.route('/predict_gradcam', methods=['POST', 'GET'])
 def predict_gradcam():
-    if request.method != 'POST':
-        return jsonify({'error': 'request method is not proper'})
-
-    filename = request.form.get("filename")
-    modelname = request.form.get("modelname")
-
     IMAGES_KNEE_ORIGINAL = current_app.config['IMAGES_KNEE_ORIGINAL']
     IMAGES_KNEE_GRADCAM = current_app.config['IMAGES_KNEE_GRADCAM']
     IMAGES_KNEE_BBOX = current_app.config['IMAGES_KNEE_BBOX']
 
-    img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
+    filename, modelname, _ = get_request_data(request)
 
+    img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
     model = load_model(modelname, current_app.config[modelname.upper()])
 
-    if modelname == 'resnet34' or model.name == 'resnet34':
-        gradcam_model = gradcam_resnet(model, IMAGES_KNEE_GRADCAM)
-
-    _, cam_ = gradcam_model(img_path)
-    print(np.max(cam_), np.min(cam_))
+    cam_ = get_gradcam(model, img_path, IMAGES_KNEE_GRADCAM)
     draw_boundingbox(cam_, img_path, IMAGES_KNEE_BBOX)
-
 
     data = dict()
     data['output_gradcam'] = os.path.splitext(filename)[0] + '_gradcam.png'
     data['output_bbox'] = os.path.splitext(filename)[0] + '_boundingbox.png'
-    print(data['output_bbox'])
-
     return jsonify(data)

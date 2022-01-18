@@ -1,1 +1,29 @@
-<!-- NOT IMPLEMENTED -->
+<div class="page-wrapper mb-2">
+                <!-- [ Main Content ] start -->
+                <nav class="navbar navbar-dark bg-dark">
+                    <div class="navbar-brand header-logo">
+                        <a target="_blank" class="b-brand" href="#">
+                            <div class="b-bg">
+                                <i class="feather icon-cpu "></i>
+                            </div>
+                            <span class="b-title font-weight-bold">{{ title }}</span>
+                        </a>
+                    </div>
+
+                    <div class="col-md-offset-1 col-md-6 pl-0">
+                        {% import "bootstrap/wtf.html" as wtf %}
+                        <form class="form-inline" method="post" role="form" action="/">
+                            {{ form.hidden_tag() }}
+                            {{ wtf.form_field(form.search_name, class="form-control mr-sm-2", type="search", placeholder="Patient Name") }}
+                            {{ wtf.form_field(form.submit,class="btn btn-outline-secondary my-2 my-sm-0 text-white ") }}
+                        </form>
+                    </div>
+
+                    <div class="col-md-3 pull-right text-right">
+                        <i class="feather icon-maximize text-white f-20 m-r-30"></i>
+                        <i class="feather icon-minimize text-white f-20 m-r-30"></i>
+                        <i class="feather icon-crop text-white f-20 m-r-30"></i>
+                        <i class="feather icon-grid text-white f-20 m-r-30"></i>
+                    </div>
+                </nav>
+            </div>

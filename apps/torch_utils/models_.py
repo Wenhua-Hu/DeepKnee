@@ -1,7 +1,12 @@
 import os
 import torch
 import torch.nn as nn
+from torch.serialization import SourceChangeWarning
 from torchvision import models
+import warnings
+
+warnings.filterwarnings("ignore", category=SourceChangeWarning)
+torch.nn.Module.dump_patches = True
 
 
 
@@ -26,18 +31,56 @@ class multi_output_model(nn.Module):
         return y1o, y2o
 
 
-def load_model(model_name,model_path):
-    if model_name.lower() == "resnet34":
-        model = models.resnet34(pretrained=False)
 
-        num_features = model.fc.in_features
-        model.fc = nn.Sequential()
-        model = multi_output_model(model, num_features)
+def load_model(model_name, model_path, classes=5):
+    name = model_name.lower()
+    model = None
+    if name.startswith('resnet'):
+        if name == 'resnet18':
+            model = models.resnet18(pretrained=False)
+        elif name == 'resnet34':
+            model = models.resnet34(pretrained=False)
+        elif name == 'resnet50':
+            model = models.resnet50(pretrained=False)
+        elif name == 'resnet101':
+            model = models.resnet101(pretrained=False)
+        elif name == 'resnet152':
+            model = models.resnet101(pretrained=False)
 
-        model.load_state_dict(torch.load(model_path, map_location=device))
-        model.name = "resnet34"
+        num_ftrs = model.fc.in_features
+        model.fc = nn.Linear(num_ftrs, classes)
+        model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
 
-    else:
-        raise Exception(f"{model_name} is not availablle")
+    elif name.startswith('vgg'):
+        if name == 'vgg16':
+            model = models.vgg16_bn(pretrained=False)
+        elif name == 'vgg19':
+            model = models.vgg19_bn(pretrained=False)
+
+        num_ftrs = model.classifier[-1].in_features
+        model.classifier[-1] = nn.Linear(num_ftrs, classes)
+        model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
+
+    elif name.startswith('inception'):
+        if name == 'inception_v3':
+            model = models.inception_v3(pretrained=False)
+            num_ftrs = model.fc.in_features
+            model.fc = nn.Linear(num_ftrs, classes)
+            model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
+
+    elif name.startswith('densenet'):
+        if name == 'densenet121':
+            model = models.densenet121(pretrained=False)
+        elif name == 'densenet169':
+            model = models.densenet169(pretrained=False)
+        elif name == 'densenet201':
+            model = models.densenet201(pretrained=False)
+
+        num_ftrs = model.classifier.in_features
+        model.fc = nn.Linear(num_ftrs, classes)
+        model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
+
+    model.name = name
+
 
     return model
