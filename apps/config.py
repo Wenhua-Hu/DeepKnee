@@ -13,7 +13,7 @@ class Config(object):
     SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_007')
 
     # This will create a file in <app> FOLDER
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(datadir, 'db/app_1.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(datadir, 'db/app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # the type of images
