@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import cv2
-import matplotlib.pyplot as plt
 import os
+
+import cv2
 import numpy as np
 
-import os
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 
 class BBoxerwGradCAM():
 
@@ -36,7 +36,6 @@ class BBoxerwGradCAM():
 
         return og_img, heatmapshow
 
-
     def show_bboxrectangle(self):
         cv2.rectangle(self.og_img,
                       (self.bbox_coords[0], self.bbox_coords[1]),
@@ -44,7 +43,6 @@ class BBoxerwGradCAM():
                       (0, 0, 0), 3)
         im = Image.fromarray(self.og_img)
         im.save("boundingbox.png")
-
 
     def form_bboxes(self):
         grey_img = cv2.cvtColor(self.smooth_heatmap, cv2.COLOR_BGR2GRAY)
@@ -75,12 +73,14 @@ class BBoxerwGradCAM():
 
 if __name__ == '__main__':
     from models_ import load_model
+
     model = load_model("resnet34", r"C:\Users\whu\Desktop\DSP_project\UVA21_DSP_QUIN\apps\data\models\resnet34_0.pth")
 
     image_resizing_scale = [400, 300]
     bbox_scaling = [1, 1, 1, 1]
     from PIL import Image
-    image_path=r"C:\Users\whu\Desktop\DSP_project\UVA21_DSP_QUIN\apps\static\assets\images\knee_gradcam\9003126L_gradcam.png"
+
+    image_path = r"C:\Users\whu\Desktop\DSP_project\UVA21_DSP_QUIN\apps\static\assets\images\knee_gradcam\9003126L_gradcam.png"
     image = Image.open(image_path)
     gcam_heatmap = np.array(image)
     bbox = BBoxerwGradCAM(model,

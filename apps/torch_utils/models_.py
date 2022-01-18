@@ -1,14 +1,13 @@
-import os
+import warnings
+
 import torch
 import torch.nn as nn
 from torch.serialization import SourceChangeWarning
 from torchvision import models
-import warnings
 
 warnings.filterwarnings("ignore", category=SourceChangeWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 torch.nn.Module.dump_patches = True
-
-
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -29,7 +28,6 @@ class multi_output_model(nn.Module):
         y2o = self.y2o(x1)
 
         return y1o, y2o
-
 
 
 def load_model(model_name, model_path, classes=5):
@@ -53,20 +51,21 @@ def load_model(model_name, model_path, classes=5):
 
     elif name.startswith('vgg'):
         if name == 'vgg16':
-            model = models.vgg16_bn(pretrained=False)
+            model = models.vgg16(pretrained=False)
         elif name == 'vgg19':
-            model = models.vgg19_bn(pretrained=False)
+            model = models.vgg19(pretrained=False)
 
         num_ftrs = model.classifier[-1].in_features
         model.classifier[-1] = nn.Linear(num_ftrs, classes)
         model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
 
     elif name.startswith('inception'):
-        if name == 'inception_v3':
+        if name == 'inceptionv3':
             model = models.inception_v3(pretrained=False)
-            num_ftrs = model.fc.in_features
-            model.fc = nn.Linear(num_ftrs, classes)
-            model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
+
+        num_ftrs = model.fc.in_features
+        model.fc = nn.Linear(num_ftrs, classes)
+        model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
 
     elif name.startswith('densenet'):
         if name == 'densenet121':
@@ -77,10 +76,9 @@ def load_model(model_name, model_path, classes=5):
             model = models.densenet201(pretrained=False)
 
         num_ftrs = model.classifier.in_features
-        model.fc = nn.Linear(num_ftrs, classes)
+        model.classifier = nn.Linear(num_ftrs, classes)
         model.load_state_dict(torch.load(model_path, map_location=device).state_dict(), strict=False)
 
     model.name = name
-
 
     return model

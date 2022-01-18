@@ -1,6 +1,7 @@
-import cv2, os
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import torch
 import torch.nn as nn
 import torchvision.transforms as tfs
@@ -8,6 +9,7 @@ from PIL import Image
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 
 class cal_cam(nn.Module):
     def __init__(self, model, outdir, feature_layer):
@@ -74,13 +76,13 @@ class cal_cam(nn.Module):
 
         plt.imshow(cam)
         plt.colorbar()
-        plt.savefig(os.path.join(self.outdir,self.name + '_gradcam_0.png'))
+        plt.savefig(os.path.join(self.outdir, self.name + '_gradcam_0.png'))
 
         cam_ = cv2.resize(cam, (299, 299))
         cam_ = cam_ - np.min(cam_)
         cam_ = cam_ / np.max(cam_)
         plt.imshow(cam_)
-        plt.savefig(os.path.join(self.outdir,self.name + '_gradcam_1.png'))
+        plt.savefig(os.path.join(self.outdir, self.name + '_gradcam_1.png'))
         cam = torch.from_numpy(cam)
 
         return cam, cam_
@@ -198,15 +200,11 @@ class gradcam_resnet(cal_cam):
 class gradcam_vgg(cal_cam):
 
     def __init__(self, model, outdir):
-        super(gradcam_resnet, self).__init__(model, outdir, "layer4")
+        super(gradcam_vgg, self).__init__(model, outdir, "features")
 
-    def forward(self, input_):
-        num = 1
+    def forward(self, input):
+
         for name, module in self.model._modules.items():
-            if (num == 1):
-                input = module(input_)
-                num = num + 1
-                continue
 
             if (name == self.feature_layer):
                 input = module(input)
@@ -222,18 +220,15 @@ class gradcam_vgg(cal_cam):
 
         return input
 
+
 class gradcam_dense(cal_cam):
 
     def __init__(self, model, outdir):
-        super(gradcam_resnet, self).__init__(model, outdir, "layer4")
+        super(gradcam_dense, self).__init__(model, outdir, "features")
 
-    def forward(self, input_):
-        num = 1
+    def forward(self, input):
+
         for name, module in self.model._modules.items():
-            if (num == 1):
-                input = module(input_)
-                num = num + 1
-                continue
 
             if (name == self.feature_layer):
                 input = module(input)
@@ -273,6 +268,7 @@ class gradcam_inception(cal_cam):
                 input = input.reshape(input.shape[0], -1)
 
             else:
+
                 input = module(input)
 
         return input
@@ -280,12 +276,16 @@ class gradcam_inception(cal_cam):
 
 # add models
 def get_gradcam(model, img_path, outdir):
-    if model.name in ("resnet18", "resnet34", "resnet50", "resnet101"):
+    if model.name in ("resnet18", "resnet34", "resnet50", "resnet101", "resnet152"):
         gradcam_model = gradcam_resnet(model, outdir)
+    elif model.name in ("inceptionv3",):
+        gradcam_model = gradcam_inception(model, outdir)
+    elif model.name in ("vgg16", "vgg19"):
+        gradcam_model = gradcam_vgg(model, outdir)
+    elif model.name in ("densenet121",):
+        gradcam_model = gradcam_dense(model, outdir)
+    else:
+        raise Exception('model is not in the available list')
 
     _, cam_ = gradcam_model(img_path)
     return cam_
-
-
-
-

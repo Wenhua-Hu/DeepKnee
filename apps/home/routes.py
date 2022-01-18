@@ -40,11 +40,7 @@ def model_predict(model, img_input):
     model.eval()
     model.zero_grad()
 
-    # add models
-    if model.name in ("resnet18", 'resnet50'):
-        output = model(img_input)
-    else:
-        output = model(img_input)
+    output = model(img_input)
 
     y_proba = F.softmax(output, dim=-1)
     y = torch.squeeze(y_proba)
@@ -63,7 +59,6 @@ def get_request_data(request):
         nsamples = int(request.form.get("nsamples"))
     else:
         nsamples = 0
-
 
     return filename, modelname, nsamples
 
@@ -88,14 +83,10 @@ def index():
 
 @blueprint.route('/predict_lime', methods=['POST', 'GET'])
 def predict_lime():
-
-
     IMAGES_KNEE_ORIGINAL = current_app.config['IMAGES_KNEE_ORIGINAL']
     IMAGES_KNEE_LIME = current_app.config['IMAGES_KNEE_LIME']
 
     filename, modelname, num_samples = get_request_data(request)
-
-
 
     img_path = os.path.join(IMAGES_KNEE_ORIGINAL, filename)
 

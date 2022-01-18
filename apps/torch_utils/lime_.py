@@ -6,14 +6,12 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 from PIL import Image
 from lime import lime_image
 from skimage.segmentation import mark_boundaries
 from sklearn.exceptions import UndefinedMetricWarning
-from torchvision import models
 
 warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
@@ -26,7 +24,7 @@ class CalLime(object):
         self.model = model
         self.img_path = img_path
         self.outdir = outdir
-        self.num_samples =num_samples
+        self.num_samples = num_samples
         self.pil_img = self.image_preprocess()
         self.pil_transform = self.get_pil_transform(299)
         self.preprocess_transform = self.get_preprocess_transform()
@@ -97,4 +95,3 @@ class CalLime(object):
 def lime_run(model, img_path, IMAGES_KNEE_LIME, num_samples):
     clime = CalLime(model, img_path, IMAGES_KNEE_LIME, num_samples)
     clime.lime_predict()
-

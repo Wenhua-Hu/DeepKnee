@@ -13,7 +13,7 @@ class Config(object):
     SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_007')
 
     # This will create a file in <app> FOLDER
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(datadir, 'db/app.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(datadir, 'db/app_1.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # the type of images
@@ -29,16 +29,20 @@ class Config(object):
     IMAGES_KNEE_BBOX = os.path.join(imagedir, 'knee_boundingbox')
 
     # add models
-    RESNET18 = os.path.join(MODELS_PATH, 'resnet18_0.pth')
-    RESNET34 = os.path.join(MODELS_PATH, 'resnet34_0.pth')
-    RESNET50 = os.path.join(MODELS_PATH, 'resnet50_0.pth')
-    RESNET101 = os.path.join(MODELS_PATH, 'resnet101_0.pth')
-    RESNET152 = os.path.join(MODELS_PATH, 'resnet152_0.pth')
+    RESNET18 = os.path.join(MODELS_PATH, 'resnet18_0.pth')   # our models
+    # RESNET18 = os.path.join(MODELS_PATH, 'resnet18_1.pth')   # our models
+    RESNET34 = os.path.join(MODELS_PATH, 'resnet34_1.pth')
+    RESNET50 = os.path.join(MODELS_PATH, 'resnet50_1.pth')
+    RESNET101 = os.path.join(MODELS_PATH, 'resnet101_1.pth')
+    RESNET152 = os.path.join(MODELS_PATH, 'resnet152_1.pth')
 
-    VGG16 = os.path.join(MODELS_PATH, 'vgg16_0.pth')
-    VGG19 = os.path.join(MODELS_PATH, 'vgg19_0.pth')
-    VGG16BN = os.path.join(MODELS_PATH, 'vgg16bn_0.pth')
-    VGG19BN = os.path.join(MODELS_PATH, 'vgg19bn_0.pth')
+    VGG16 = os.path.join(MODELS_PATH, 'vgg16_1.pth')
+    VGG19 = os.path.join(MODELS_PATH, 'vgg19_1.pth')
+
+
+    DENSENET121 = os.path.join(MODELS_PATH, 'densenet121_1.pth')
+
+    INCEPTIONV3 = os.path.join(MODELS_PATH, 'inceptionv3_1.pth')
 
 
 

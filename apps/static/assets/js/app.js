@@ -1,10 +1,12 @@
 $(function () {
     $(".card.card-image-1").click(function () {
-        url = $(this).attr('pic_url');
-        LR = $(this).attr('xray');
-        src= './static/assets/images/default.png'
+            url = $(this).attr('pic_url');
+            LR = $(this).attr('xray');
+            src = './static/assets/images/default.png';
 
-        $('.card-thumbnail img').attr('src', src);
+
+            $('.card-thumbnail img').attr('src', src);
+            $("div#feedback .heatmap").text("HEATMAP 1");
 
             if (LR == 'L') {
                 $('.card-image-l a.card-image-hm').each(function (k, element) {
@@ -31,6 +33,7 @@ $(function () {
 
             $('#infer-thumbnail').attr('xray', LR);
             $('#image-explainer').attr('xray', LR);
+
 
         }
     );
@@ -93,44 +96,71 @@ $(function () {
 
         image_name = $(this).attr('filename');
         model_name = $('input[name=models]:checked').val();
+
+
         LR = $(this).attr('xray');
 
         let n_samples = 100;
+        let load = 0;
+
+        if (model_name == 'resnet18') {
+            times = n_samples * 1.2
+        } else if (model_name == 'resnet34') {
+            times = n_samples * 2
+        } else if (model_name == 'resnet50') {
+            times = n_samples * 3
+        } else if (model_name == 'resnet101') {
+            times = n_samples * 4
+        } else if (model_name == 'resnet152') {
+            times = n_samples * 6
+        } else if (model_name == 'vgg16') {
+            console.log(model_name)
+            times = n_samples * 14
+        } else if (model_name == 'vgg19') {
+            times = n_samples * 21
+        }
 
         const loadText = document.querySelector(".loading-text");
-
-        let load = 0;
-        let int = setInterval(blurring,n_samples*3);
-
-        function blurring(){
-          load++
-          if(load>98){
-            clearInterval(int);
-          }
-          loadText.innerText = `${load}%`
-          // loadText.style.opacity = scale(load, 0, 100, 1, 0)
-        }
         const scale = (num, in_min, in_max, out_min, out_max) => {
-          return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
+            return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
         }
 
-        $.post("/predict_lime", {filename: image_name, modelname: model_name, nsamples: n_samples}, function(data) {
+        loadText.innerText = `0%`
+        loadText.style.opacity = scale(0, 0, 100, 1, 0)
+
+        let int = setInterval(blurring, times);
+        console.log(int);
+
+        function blurring() {
+            load++
+            if (load > 99) {
+                clearInterval(int);
+            }
+            loadText.innerText = `${load}%`
+            loadText.style.opacity = scale(load, 0, 100, 1, 0)
+        }
+
+
+        $.post("/predict_lime", {filename: image_name, modelname: model_name, nsamples: n_samples}, function (data) {
             lime_path = data['output_lime']
             $('.card-thumbnail img:eq(2)').attr('src', './static/assets/images/knee_lime/' + lime_path);
-            // const loadText = document.querySelector(".loading-text");
-            // loadText.style.opacity = scale(100, 0, 100, 1, 0)
+            const loadText = document.querySelector(".loading-text");
+            loadText.style.opacity = scale(100, 0, 100, 1, 0);
+            load = 99
+
         }, "json");
     });
 
 
-    $(".card-thumbnail img").click(function () {
+    $("div.card-thumbnail div.card").click(function () {
 
             LR = $("#infer-thumbnail").attr('xray');
-            console.log(LR);
-            src = $(this).attr('src');
-            console.log(src);
-            index_ = $(this).index(".card-thumbnail img");
-            console.log(index_)
+
+            src = $(this).children("img").attr('src');
+
+            index_ = $(this).index("div.card-thumbnail div.card");
+            num = parseInt(index_) + 1;
+            $("div#feedback .heatmap").text("HEATMAP " + num);
 
             if (LR == 'L') {
                 if (index_ >= 2) {

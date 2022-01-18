@@ -7,13 +7,13 @@
 
 {% block content %}
 
-    <div class="pcoded-content pt-3">
+    <div class="pcoded-content pt-3" style="max-height: 1080px">
         <div class="main-body">
             {% include "includes/navigation.html" %}
             <div class="row">
-                {% include "includes/navbar.html" %}
-                {% include "includes/contents.html" %}
-                {% include "includes/siderbar.html" %}
+                {% include "includes/leftbar.html" %}
+                {% include "includes/content.html" %}
+                {% include "includes/rightbar.html" %}
             </div>
         </div>
     </div>
