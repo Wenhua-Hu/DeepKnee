@@ -54,6 +54,30 @@ $(function () {
 
             $(".prediction-stage a:nth-child(2)").text(stage);
 
+
+            var myChart = echarts.init(document.getElementById('chart_1'));
+            option1 = {
+                  legend: {},
+                  tooltip: {},
+                  dataset: {
+                    dimensions: ['product', 'Prediction', 'Confidence'],
+                    source: [
+                      { product: 'KL 0', Prediction: parseInt(data['prediction'][0]*100).toFixed(2), Confidence: 85.8},
+                      { product: 'KL 1', Prediction: parseInt(data['prediction'][1]*100).toFixed(2), Confidence: 73.4},
+                      { product: 'KL 2', Prediction: parseInt(data['prediction'][2]*100).toFixed(2), Confidence: 65.2},
+                      { product: 'KL 3', Prediction: parseInt(data['prediction'][3]*100).toFixed(2), Confidence: 53.9},
+                      { product: 'KL 4', Prediction: parseInt(data['prediction'][4]*100).toFixed(2), Confidence: 53.9},
+                    ]
+                  },
+                  xAxis: { type: 'category' },
+                  yAxis: {},
+                  // Declare several bar series, each will be mapped
+                  // to a column of dataset.source by default.
+                  series: [ { type: 'bar' }, { type: 'bar' }]
+                };
+            myChart.setOption(option1);
+
+
         }, "json");
     });
 

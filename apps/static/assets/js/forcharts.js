@@ -9,11 +9,11 @@ option1 = {
   dataset: {
     dimensions: ['product', 'Prediction', 'Confidence'],
     source: [
-      { product: 'KL 0', Prediction: 43.3, Confidence: 85.8},
-      { product: 'KL 1', Prediction: 83.1, Confidence: 73.4},
-      { product: 'KL 2', Prediction: 86.4, Confidence: 65.2},
-      { product: 'KL 3', Prediction: 72.4, Confidence: 53.9},
-      { product: 'KL 4', Prediction: 72.4, Confidence: 53.9},
+      { product: 'KL 0', Prediction: 0, Confidence: 85.8},
+      { product: 'KL 1', Prediction: 0, Confidence: 73.4},
+      { product: 'KL 2', Prediction: 0, Confidence: 65.2},
+      { product: 'KL 3', Prediction: 0, Confidence: 53.9},
+      { product: 'KL 4', Prediction: 0, Confidence: 53.9},
     ]
   },
   xAxis: { type: 'category' },
@@ -32,29 +32,6 @@ Chart1.setOption(option1);
 var chartDom = document.getElementById('chart_2');
 var Chart2 = echarts.init(chartDom);
 var option2;
-
-// option2 = {
-//   xAxis: {
-//     type: 'category',
-//     data: ['V-16', 'V-19', 'R-18', 'R-34', 'R-50', 'R-101']
-//   },
-//   yAxis: {
-//     type: 'value'
-//   },
-//   series: [
-//     {
-//       data: [
-//         60,
-//         61,
-//         62,
-//         63,
-//         64,
-//         65
-//       ],
-//       type: 'bar'
-//     }
-//   ]
-// };
 
 
 
