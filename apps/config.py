@@ -29,16 +29,15 @@ class Config(object):
     IMAGES_KNEE_BBOX = os.path.join(imagedir, 'knee_boundingbox')
 
     # add models
+    VGG16 = os.path.join(MODELS_PATH, 'vgg16_1.pth')
+    VGG19 = os.path.join(MODELS_PATH, 'vgg19_1.pth')
+
     RESNET18 = os.path.join(MODELS_PATH, 'resnet18_0.pth')   # our models
-    # RESNET18 = os.path.join(MODELS_PATH, 'resnet18_1.pth')   # our models
+    # RESNET18 = os.path.join(MODELS_PATH, 'resnet18_1.pth')
     RESNET34 = os.path.join(MODELS_PATH, 'resnet34_1.pth')
     RESNET50 = os.path.join(MODELS_PATH, 'resnet50_1.pth')
     RESNET101 = os.path.join(MODELS_PATH, 'resnet101_1.pth')
     RESNET152 = os.path.join(MODELS_PATH, 'resnet152_1.pth')
-
-    VGG16 = os.path.join(MODELS_PATH, 'vgg16_1.pth')
-    VGG19 = os.path.join(MODELS_PATH, 'vgg19_1.pth')
-
 
     DENSENET121 = os.path.join(MODELS_PATH, 'densenet121_1.pth')
 

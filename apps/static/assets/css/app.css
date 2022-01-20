@@ -409,3 +409,9 @@ a {
   color: #fff;
   font-size: 30px;
 }
+
+
+  #chart_1, #chart_2 {
+    height: 340px;
+    width: 400px;
+  }
