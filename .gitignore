@@ -34,9 +34,9 @@ apps/static/assets/yarn.lock
 apps/static/assets/.temp
 
 # materials
-apps/data/images/train
 apps/data/models
 apps/data/ModelWeights
+
 
 # test
 tests/
