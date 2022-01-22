@@ -28,16 +28,14 @@ _templates
 package-lock.json
 .vscode/symbols.json
 
-# ide
 apps/static/assets/node_modules
 apps/static/assets/yarn.lock
 apps/static/assets/.temp
 
 # materials
 apps/data/models
-apps/data/ModelWeights
 
-
+*.patch
 # test
-tests/
-!tests/unit_test.py
+tests/*
+

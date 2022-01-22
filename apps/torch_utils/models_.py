@@ -33,16 +33,16 @@ class multi_output_model(nn.Module):
 def load_model(model_name, model_path, classes=5):
     name = model_name.lower()
     model = None
+    print("use:",name)
     if name.startswith('resnet'):
         if name == 'resnet18':
             model = models.resnet18(pretrained=False)
         elif name == 'resnet34':
             model = models.resnet34(pretrained=False)
         elif name == 'resnet50':
+
             model = models.resnet50(pretrained=False)
         elif name == 'resnet101':
-            model = models.resnet101(pretrained=False)
-        elif name == 'resnet152':
             model = models.resnet101(pretrained=False)
 
         num_ftrs = model.fc.in_features

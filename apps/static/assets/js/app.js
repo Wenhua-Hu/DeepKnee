@@ -1,5 +1,6 @@
 $(function () {
 
+    let n_samples = 10;
     let metrics_data = {
         'resnet18': {
             '0': [
@@ -229,7 +230,7 @@ $(function () {
 
         LR = $(this).attr('xray');
 
-        let n_samples = 100;
+
         let load = 0;
 
         if (model_name == 'resnet18') {

@@ -1,5 +1,5 @@
 ## University of Amsterdam AI / XAI project for Medical Organization - Quin
-- conda create --name DeepKnee python=3.8
+- conda create --name DeepKnee python=3.8.8
 - conda activate DeepKnee
 - git clone https://github.com/whu-linuxer/UVA21_DSP_QUIN.git
 - cd UVA21_DSP_QUIN
@@ -12,22 +12,19 @@ Contact: w.hu1224@gmail.com (Wenhua Hu)
 
 GUI Functionalities:
 
-- support to search for patient from database
-- support to show patient personal information
-- support to show patient's xray images and latest taken images show top of past images
-- support to do prediction and analysis by simple clicking on any image
-- support to zoom in the images by clicking on the images in the content
-- support to display thumbnails of all XAI images (HEATMAP, BOUNDINGBOX AND LIME)
-- support to choose single model of 6 models
-- support to switch among the XAI images in content by clicking on the specific thumbnail
-- support to recognize which side of the knee (LEFT or RIGHT)
-- support to do analysis for both left and right knees in parallel 
-- support to predict the label and show confidence score in 5 grades 
-- support to give the feedback on specific XAI images (Clicking on the thumbnail to switch the corresponding feedback box)
-- support to store the user's decision (the administration on Quin can evaluate or improve the model on top of these data)
+- support to search for patient from system - Here we use the local lightweighted database sqllites
+- support to update patient personal information and radiographs data, the latest radiographs are ahead of the other radiographs (clinician can focus on the new radiographs being received)
+- support to do prediction and explainable analysis in parallel
+- support to zoom in the radiographs
+- provide thumbnails to hint the progress of processing (HEATMAP, BOUNDINGBOX AND LIME)
+- support to choose 6 kinds of single models
+- support to switch among radiographs for comparison
+- provide different channels for both left and right knees 
+- support to give confidence score for 5 grades
+- support to give a feedback / decison on top of a specific XAI image (Clicking on the thumbnail to switch the corresponding comment box, Quin could evaluate or improve the model on top of these data)
 - support to show the metrics on top of each model being selected (the question mark can show the desc on hovering)
 
-Notes: the Lime needs some minutes to analysis (the progress on percentage gives a hint when it is done)
+Notes: the Lime needs some minutes to analysis
 
 Inference:
 
