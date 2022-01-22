@@ -10,8 +10,10 @@ from apps.config import config_dict
 # WARNING: Don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+
 # The configuration
 get_config_mode = 'Debug' if DEBUG else 'Production'
+
 
 try:
 
