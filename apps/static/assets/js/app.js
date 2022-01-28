@@ -1,6 +1,7 @@
 $(function () {
 
-    let n_samples = 10;
+    const n_samples = 1000;
+
     let metrics_data = {
         'resnet18': {
             '0': [
@@ -163,73 +164,96 @@ $(function () {
             $('#infer-thumbnail').attr('xray', LR);
             $('#image-explainer').attr('xray', LR);
 
-
         }
     );
 
 
-    $(".card.card-image-1").click(function () {
-
-        image_name = $(this).attr('filename');
-        model_name = $('input[name=models]:checked').val();
-
-        $.post("/predict_score", {filename: image_name, modelname: model_name}, function (data) {
-            probas = data['prediction'];
-            stage = data['predicted_label'];
-
-            $('table.prediction-proba td span').each(function (k, element) {
-                $(element).text((probas[k] * 100).toFixed(2))
-            });
-
-            $(".prediction-stage a:nth-child(2)").text(stage);
-
-
-        }, "json");
-    });
-
+    var currentRequest_score = null;
 
     $(".card.card-image-1").click(function () {
 
         image_name = $(this).attr('filename');
         model_name = $('input[name=models]:checked').val();
-        LR = $(this).attr('xray');
 
-        $.post("/predict_gradcam", {filename: image_name, modelname: model_name}, function (data) {
-            heapmap_path = data['output_gradcam']
-            boundingbox_path = data['output_bbox']
+        currentRequest_score = jQuery.ajax({
+            type: 'POST',
+            data: {filename: image_name, modelname: model_name},
+            url: '/predict_score',
+            dataType: 'json',
+            beforeSend: function () {
+                if (currentRequest_score != null) {
+                    currentRequest_score.abort();
+                }
+            },
+            success: function (data) {
+                probas = data['prediction'];
+                stage = data['predicted_label'];
 
-            $('.card-thumbnail img:eq(0)').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
-            $('.card-thumbnail img:eq(1)').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
+                $('table.prediction-proba td span').each(function (k, element) {
+                    $(element).text((probas[k] * 100).toFixed(2))
+                });
 
-
-            if (LR == 'L') {
-                $('.card-image-l a.card-image-hm:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
-                $('.card-image-l div.card-image-hm-pop:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
-
-                $('.card-image-l a.card-image-hm:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
-                $('.card-image-l div.card-image-hm-pop:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
-
-            } else if (LR == 'R') {
-                $('.card-image-r a.card-image-hm:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
-                $('.card-image-r div.card-image-hm-pop:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
-
-                $('.card-image-r a.card-image-hm:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
-                $('.card-image-r div.card-image-hm-pop:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
-
+                $(".prediction-stage a:nth-child(2)").text(stage);
             }
+        });
 
-        }, "json");
     });
 
+
+    var currentRequest_gradcam = null;
 
     $(".card.card-image-1").click(function () {
 
         image_name = $(this).attr('filename');
         model_name = $('input[name=models]:checked').val();
-
-
         LR = $(this).attr('xray');
 
+        currentRequest_gradcam = jQuery.ajax({
+            type: 'POST',
+            data: {filename: image_name, modelname: model_name},
+            url: '/predict_gradcam',
+            dataType: 'json',
+            beforeSend: function () {
+                if (currentRequest_gradcam != null) {
+                    currentRequest_gradcam.abort();
+                }
+            },
+            success: function (data) {
+                heapmap_path = data['output_gradcam']
+                boundingbox_path = data['output_bbox']
+
+                $('.card-thumbnail img:eq(0)').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
+                $('.card-thumbnail img:eq(1)').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
+
+
+                if (LR == 'L') {
+                    $('.card-image-l a.card-image-hm:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
+                    $('.card-image-l div.card-image-hm-pop:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
+
+                    $('.card-image-l a.card-image-hm:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
+                    $('.card-image-l div.card-image-hm-pop:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
+
+                } else if (LR == 'R') {
+                    $('.card-image-r a.card-image-hm:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
+                    $('.card-image-r div.card-image-hm-pop:eq(0)').find('img').attr('src', './static/assets/images/knee_gradcam/' + heapmap_path);
+
+                    $('.card-image-r a.card-image-hm:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
+                    $('.card-image-r div.card-image-hm-pop:eq(1)').find('img').attr('src', './static/assets/images/knee_boundingbox/' + boundingbox_path);
+
+                }
+            }
+        });
+
+    });
+
+
+    var currentRequest_lime = null;
+
+    $(".card.card-image-1").click(function () {
+
+        image_name = $(this).attr('filename');
+        model_name = $('input[name=models]:checked').val();
+        LR = $(this).attr('xray');
 
         let load = 0;
 
@@ -268,24 +292,32 @@ $(function () {
             loadText.style.opacity = scale(load, 0, 100, 1, 0)
         }
 
+        currentRequest_lime = jQuery.ajax({
+            type: 'POST',
+            data: {filename: image_name, modelname: model_name, nsamples: n_samples},
+            url: '/predict_lime',
+            dataType: 'json',
+            beforeSend: function () {
+                if (currentRequest_lime != null) {
+                    currentRequest_lime.abort();
+                }
+            },
+            success: function (data) {
+                lime_path = data['output_lime']
+                $('.card-thumbnail img:eq(2)').attr('src', './static/assets/images/knee_lime/' + lime_path);
+                const loadText = document.querySelector(".loading-text");
+                loadText.style.opacity = scale(100, 0, 100, 1, 0);
+                load = 99
+            }
+        });
 
-        $.post("/predict_lime", {filename: image_name, modelname: model_name, nsamples: n_samples}, function (data) {
-            lime_path = data['output_lime']
-            $('.card-thumbnail img:eq(2)').attr('src', './static/assets/images/knee_lime/' + lime_path);
-            const loadText = document.querySelector(".loading-text");
-            loadText.style.opacity = scale(100, 0, 100, 1, 0);
-            load = 99
-
-        }, "json");
     });
 
 
     $("div.card-thumbnail div.card").click(function () {
 
             LR = $("#infer-thumbnail").attr('xray');
-
             src = $(this).children("img").attr('src');
-
             index_ = $(this).index("div.card-thumbnail div.card");
             num = parseInt(index_) + 1;
             $("div#feedback .heatmap").text("HEATMAP " + num);
@@ -309,7 +341,6 @@ $(function () {
             }
         }
     );
-
 
 });
 
