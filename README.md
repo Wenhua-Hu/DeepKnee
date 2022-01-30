@@ -1,14 +1,16 @@
-## University of Amsterdam AI / XAI project for Medical Organization - Quin
+## University of Amsterdam AI / XAI project for Medical Organization Quin
 - conda create --name DeepKnee python=3.8.8
 - conda activate DeepKnee
-- git clone https://github.com/whu-linuxer/UVA21_DSP_QUIN.git
-- cd UVA21_DSP_QUIN
+- git clone https://github.com/whu-linuxer/DeepKnee.git
+- cd DeepKnee
 - pip install -r requirements.txt
 - python run.py
 
 Group Members: Lukas, Jordy, Anna and Wenhua
 
 Contact: w.hu1224@gmail.com (Wenhua Hu)
+
+[Models and Datasets](https://www.dropbox.com/sh/01pks0pdugpgh07/AAAmRcqFt-BhdqEFIRj3mNkVa?dl=0)
 
 GUI Functionalities:
 
