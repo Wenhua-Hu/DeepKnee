@@ -2,7 +2,9 @@
 - conda create --name DeepKnee python=3.8.8
 - conda activate DeepKnee
 - git clone https://github.com/whu-linuxer/DeepKnee.git
-- cd DeepKnee
+- cd DeepKnee/apps/data/models && mkdir models
+- download the models into directory: models/
+- change the model name in correspondence with the names in apps/config.py
 - pip install -r requirements.txt
 - python run.py
 
