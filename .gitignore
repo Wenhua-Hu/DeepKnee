@@ -36,5 +36,5 @@ apps/data/models
 
 *.patch
 # test
-tests/*
+manual/*
 
