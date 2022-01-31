@@ -13,6 +13,7 @@ Group Members: Lukas, Jordy, Anna and Wenhua
 Contact: w.hu1224@gmail.com (Wenhua Hu)
 
 [Models and Datasets](https://www.dropbox.com/sh/01pks0pdugpgh07/AAAmRcqFt-BhdqEFIRj3mNkVa?dl=0)
+[Movie introduction](https://youtu.be/ul8kfml8PeY)
 
 GUI Functionalities:
 
